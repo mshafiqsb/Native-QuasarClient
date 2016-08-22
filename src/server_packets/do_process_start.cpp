@@ -5,6 +5,9 @@
 
 using namespace std;
 using namespace quasar::packets;
+#ifdef _MSC_VER
+using namespace quasar;
+#endif
 
 do_process_start_packet::do_process_start_packet() :
 		quasar_server_packet(PACKET_DO_PROCESS_START),

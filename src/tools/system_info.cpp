@@ -36,7 +36,7 @@ system_info::system_info() {
 	initialize_extended_data();
 }
 
-#if WIN32 && !__x86_64
+#if WIN32 && !__x86_64 && !_MSC_VER
 
 typedef struct _TOKEN_ELEVATION {
 	DWORD TokenIsElevated;
@@ -99,8 +99,13 @@ void system_info::initialize_data() {
 	if (OpenProcessToken(GetCurrentProcess(), TOKEN_QUERY, &hToken)) {
 		TOKEN_ELEVATION Elevation;
 		int cbSize = sizeof(TOKEN_ELEVATION);
-		if (GetTokenInformation(hToken, (TOKEN_INFORMATION_CLASS) 20 /* TokenElevation */, &Elevation,
+#ifdef _MSC_VER
+		if (GetTokenInformation(hToken, TokenElevation, &Elevation,
 								sizeof(Elevation), reinterpret_cast<PDWORD>(&cbSize))) {
+#else
+		if (GetTokenInformation(hToken, (TOKEN_INFORMATION_CLASS)20 /* TokenElevation */, &Elevation,
+								sizeof(Elevation), reinterpret_cast<PDWORD>(&cbSize))) {
+#endif
 			fRet = Elevation.TokenIsElevated;
 		}
 	}

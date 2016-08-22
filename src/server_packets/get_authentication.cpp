@@ -2,6 +2,9 @@
 #include "packets/server_packets.h"
 
 using namespace quasar::packets;
+#ifdef _MSC_VER
+using namespace quasar;
+#endif
 
 get_authentication_packet::get_authentication_packet() :
 		quasar_server_packet(PACKET_GET_AUTHENTICATION) {

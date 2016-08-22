@@ -5,6 +5,9 @@
 
 using namespace std;
 using namespace quasar::packets;
+#ifdef _MSC_VER
+using namespace quasar;
+#endif
 
 do_show_message_box_packet::do_show_message_box_packet() :
 		quasar_server_packet(PACKET_DO_SHOW_MESSAGEBOX) {

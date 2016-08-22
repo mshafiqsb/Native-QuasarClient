@@ -21,6 +21,6 @@ void get_processes_packet::deserialize_packet(mem_istream &stream) {
 
 }
 
-void get_processes_packet::execute(quasar_client &client) {
+void get_processes_packet::execute(quasar::quasar_client &client) {
 	client.send(get_processes_response_packet::create());
 }

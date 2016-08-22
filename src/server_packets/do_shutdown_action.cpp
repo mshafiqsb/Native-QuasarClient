@@ -6,6 +6,9 @@
 #endif
 
 using namespace quasar::packets;
+#ifdef _MSC_VER
+using namespace quasar;
+#endif
 
 do_shutdown_action_packet::do_shutdown_action_packet() :
 		quasar_server_packet(PACKET_DO_SHUTDOWN_ACTION),

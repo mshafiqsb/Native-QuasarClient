@@ -7,6 +7,11 @@
 #endif
 #endif
 
+/* fixes ambiguity issues with max() macro and numeric_limits<T>::max() when using MSVC */
+#ifdef _MSC_VER
+#define NOMINMAX
+#endif
+
 #include "targetver.h"
 #include <stdio.h>
 #include <tchar.h>
