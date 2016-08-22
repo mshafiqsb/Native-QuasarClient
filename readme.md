@@ -85,7 +85,7 @@ Native QuasarClient is a native implementation of the client part for [QuasarRAT
 (Requires proper setup of MinGW including PATH environment variables set to use build script)
 
 1. Clone the repository
-    * `> git clone --recursive https://github.com/UbbeLoL/QuasarRAT.git`
+    * `> git clone --recursive https://github.com/UbbeLoL/Native-QuasarClient.git`
 2. Navigate to the NativeClient directory
     * `> cd .\QuasarRAT\NativeClient`
 3. Run "*build-(configuration)-mingw.bat*"
@@ -94,7 +94,7 @@ Native QuasarClient is a native implementation of the client part for [QuasarRAT
 (Step 2 to 4 is only required first compilation)
 
 1. Clone the repository
-    * `$ git clone --recursive https://github.com/UbbeLoL/QuasarRAT.git`
+    * `$ git clone --recursive https://github.com/UbbeLoL/Native-QuasarClient.git`
 2. Navigate to the CryptoPP directory
     * `$ cd ./QuasarRAT/NativeClient/cryptopp`
 3. Build cryptopp (Only need to do this once)
