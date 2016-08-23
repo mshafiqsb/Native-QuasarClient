@@ -1,4 +1,5 @@
 #include <iostream>
+#include <tools/filesys_mgr.h>
 #include "stdafx.h"
 #include "quasar_client.h"
 
@@ -9,6 +10,7 @@ struct HelloWorld {
 };
 
 int main(int argc, char *argv[]) {
+	quasar::tools::filesys_mgr::get_drives();
 	boost::asio::io_service io_srvc;
 
 	HelloWorld h;
