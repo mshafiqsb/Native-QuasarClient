@@ -92,5 +92,13 @@ namespace quasar {
 			uint32_t m_action;
 		};
 
+		class get_drives_packet : public quasar_server_packet {
+		public:
+			get_drives_packet();
+
+			void deserialize_packet(mem_istream &stream) override;
+			void execute(quasar_client &client) override;
+		};
+
 	}
 }
