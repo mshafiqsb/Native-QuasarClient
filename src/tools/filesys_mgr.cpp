@@ -59,6 +59,7 @@ const vector<drive_info> filesys_mgr::get_drives() {
 			/* C: is primary partition on windows */
 			} else if(drive.display_name[0] == 'C') {
 				drive.display_name.append("[Primary Partition, ");
+			//TODO: maybe add more specific common assignments
 			} else {
 				drive.display_name.append("[Local Disk, ");
 			}
