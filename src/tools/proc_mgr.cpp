@@ -186,6 +186,7 @@ BOOL proc_mgr::enum_windows_proc_cb(HWND hwnd, LPARAM lParam) {
 }
 
 bool proc_mgr::is_main_window(HWND hwnd) {
+	/* this is how the .NET CLR does it */
 	if (GetWindow(hwnd, GW_OWNER) != nullptr || !IsWindowVisible(hwnd)) {
 		return false;
 	}
