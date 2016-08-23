@@ -36,7 +36,7 @@ system_info::system_info() {
 	initialize_extended_data();
 }
 
-#if WIN32 && !__x86_64 && !_MSC_VER
+#if WIN32 && !_MSC_VER
 
 typedef struct _TOKEN_ELEVATION {
 	DWORD TokenIsElevated;
@@ -44,35 +44,35 @@ typedef struct _TOKEN_ELEVATION {
 
 #endif
 
-string system_info::get_account_type() {
+string system_info::get_account_type() const {
 	return m_account_type;
 }
 
-string system_info::get_pcname() {
+string system_info::get_pcname() const {
 	return m_pcname;
 }
 
-string system_info::get_username() {
+string system_info::get_username() const {
 	return m_username;
 }
 
-string system_info::get_operating_system() {
+string system_info::get_operating_system() const {
 	return m_os;
 }
 
-string system_info::get_city() {
+string system_info::get_city() const {
 	return m_city;
 }
 
-string system_info::get_country() {
+string system_info::get_country() const {
 	return m_country;
 }
 
-string system_info::get_country_code() {
+string system_info::get_country_code() const {
 	return m_country_code;
 }
 
-string system_info::get_region() {
+string system_info::get_region() const {
 	return m_region;
 }
 

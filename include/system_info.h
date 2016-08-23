@@ -14,14 +14,14 @@ namespace quasar {
 		public:
 			system_info();
 
-			std::string get_account_type();
-			std::string get_operating_system();
-			std::string get_city();
-			std::string get_country();
-			std::string get_country_code();
-			std::string get_pcname();
-			std::string get_region();
-			std::string get_username();
+			std::string get_account_type() const;
+			std::string get_operating_system() const;
+			std::string get_city() const;
+			std::string get_country() const;
+			std::string get_country_code() const;
+			std::string get_pcname() const;
+			std::string get_region() const;
+			std::string get_username() const;
 
 		private:
 			std::string m_account_type;
