@@ -149,8 +149,8 @@ void system_info::initialize_data() {
 
 	m_pcname = string(hostname);
 
-	register struct passwd *pw;
-	register uid_t uid;
+	passwd *pw;
+	uid_t uid;
 	int c;
 
 	uid = geteuid ();
