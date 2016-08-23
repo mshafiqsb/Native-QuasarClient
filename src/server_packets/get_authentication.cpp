@@ -7,7 +7,7 @@ using namespace quasar;
 #endif
 
 get_authentication_packet::get_authentication_packet() :
-				quasar_server_packet(PACKET_GET_AUTHENTICATION) {
+		quasar_server_packet(PACKET_GET_AUTHENTICATION) {
 
 }
 
@@ -16,6 +16,6 @@ void get_authentication_packet::deserialize_packet(mem_istream &stream) {
 }
 
 void get_authentication_packet::execute(quasar_client &client) {
-		auto response = std::make_shared<get_authentication_response_packet>();
-		client.send(response);
+	auto response = std::make_shared<get_authentication_response_packet>();
+	client.send(response);
 }

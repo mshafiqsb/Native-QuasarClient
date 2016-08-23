@@ -72,23 +72,23 @@ typedef unsigned short int ui16;
 // hash entry
 typedef struct {
 #if QLZ_COMPRESSION_LEVEL == 1
-		ui32 cache;
+	ui32 cache;
 #if defined QLZ_PTR_64 && QLZ_STREAMING_BUFFER == 0
-		unsigned int offset;
+	unsigned int offset;
 #else
-		const unsigned char *offset;
+	const unsigned char *offset;
 #endif
 #else
-		const unsigned char *offset[QLZ_POINTERS];
+	const unsigned char *offset[QLZ_POINTERS];
 #endif
 
 } qlz_hash_compress;
 
 typedef struct {
 #if QLZ_COMPRESSION_LEVEL == 1
-		const unsigned char *offset;
+	const unsigned char *offset;
 #else
-		const unsigned char *offset[QLZ_POINTERS];
+	const unsigned char *offset[QLZ_POINTERS];
 #endif
 } qlz_hash_decompress;
 
@@ -96,22 +96,22 @@ typedef struct {
 // states
 typedef struct {
 #if QLZ_STREAMING_BUFFER > 0
-		unsigned char stream_buffer[QLZ_STREAMING_BUFFER];
+	unsigned char stream_buffer[QLZ_STREAMING_BUFFER];
 #endif
-		size_t stream_counter;
-		qlz_hash_compress hash[QLZ_HASH_VALUES];
-		unsigned char hash_counter[QLZ_HASH_VALUES];
+	size_t stream_counter;
+	qlz_hash_compress hash[QLZ_HASH_VALUES];
+	unsigned char hash_counter[QLZ_HASH_VALUES];
 } qlz_state_compress;
 
 
 #if QLZ_COMPRESSION_LEVEL == 1 || QLZ_COMPRESSION_LEVEL == 2
 typedef struct {
 #if QLZ_STREAMING_BUFFER > 0
-		unsigned char stream_buffer[QLZ_STREAMING_BUFFER];
+	unsigned char stream_buffer[QLZ_STREAMING_BUFFER];
 #endif
-		qlz_hash_decompress hash[QLZ_HASH_VALUES];
-		unsigned char hash_counter[QLZ_HASH_VALUES];
-		size_t stream_counter;
+	qlz_hash_decompress hash[QLZ_HASH_VALUES];
+	unsigned char hash_counter[QLZ_HASH_VALUES];
+	size_t stream_counter;
 } qlz_state_decompress;
 #elif QLZ_COMPRESSION_LEVEL == 3
 typedef struct
