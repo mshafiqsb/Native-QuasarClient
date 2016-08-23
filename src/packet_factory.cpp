@@ -41,6 +41,10 @@ std::shared_ptr<quasar_server_packet> packet_factory::create_packet(vector<unsig
 			packet = std::dynamic_pointer_cast<quasar_server_packet>(
 					std::make_shared<do_shutdown_action_packet>());
 			break;
+		case PACKET_GET_DRIVES:
+			packet = std::dynamic_pointer_cast<quasar_server_packet>(
+					std::make_shared<get_drives_packet>());
+			break;
 	}
 
 // can be null because of dynamic ptr cast

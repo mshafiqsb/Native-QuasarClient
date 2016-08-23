@@ -1,15 +1,21 @@
+#include <boost/range/iterator_range_core.hpp>
 #include "stdafx.h"
 #include "filesys_mgr.h"
+#include "boost/filesystem.hpp"
 
 using namespace std;
 using namespace quasar::tools;
+using namespace boost;
+using namespace boost::filesystem;
+
+using drive_info = filesys_mgr::drive_info;
+using file_info = filesys_mgr::file_info;
 
 #ifdef WIN32
 
-using drive_info = filesys_mgr::drive_info;
-
 const vector<drive_info> filesys_mgr::get_drives() {
 	vector<drive_info> drives;
+#ifdef WIN32
 	DWORD drivesMask = GetLogicalDrives();
 	if (drivesMask == 0) {
 		return drives;
@@ -21,7 +27,8 @@ const vector<drive_info> filesys_mgr::get_drives() {
 			drive_info info;
 			string rootName(".:\\ "); // placeholder string
 			rootName[0] = (char) ('A' + i);
-			info.root_dir = rootName;
+			info.m_root_dir = rootName;
+			info.m_display_name = rootName;
 			drives.push_back(info);
 		}
 		drivesMask >>= 1;
@@ -38,7 +45,7 @@ const vector<drive_info> filesys_mgr::get_drives() {
 		ZeroMemory(fileSystemName, sizeof(fileSystemName));
 
 		if (GetVolumeInformation(
-				drive.root_dir.c_str(),
+				drive.m_root_dir.c_str(),
 				volumeName,
 				sizeof(volumeName),
 				&serialNumber,
@@ -47,28 +54,63 @@ const vector<drive_info> filesys_mgr::get_drives() {
 				fileSystemName,
 				sizeof(fileSystemName)
 		)) {
-			if (volumeName[0] == '\0') {
-				drive.display_name = "";
-			} else {
-				drive.display_name = "(" + string(volumeName) + ") ";
+			if (volumeName[0] != '\0') {
+				drive.m_display_name.append("(" + string(volumeName) + ") ");
 			}
 
 			/* A: and B: are floppy */
-			if(drive.display_name[0] < 'C') {
-				drive.display_name.append("[Floppy Disk, ");
-			/* C: is primary partition on windows */
-			} else if(drive.display_name[0] == 'C') {
-				drive.display_name.append("[Primary Partition, ");
-			//TODO: maybe add more specific common assignments
+			if (drive.m_display_name[0] < 'C') {
+				drive.m_display_name.append("[Floppy Disk, ");
+				/* C: is primary partition on windows */
+			} else if (drive.m_display_name[0] == 'C') {
+				drive.m_display_name.append("[Primary Partition, ");
+				//TODO: maybe add more specific common assignments
 			} else {
-				drive.display_name.append("[Local Disk, ");
+				drive.m_display_name.append("[Local Disk, ");
 			}
 
-			drive.display_name.append(string(fileSystemName) + "]");
+			drive.m_display_name.append(string(fileSystemName) + "]");
 		}
 	}
+#elif __linux__
+	drive_info driveInf;
+	driveInf.root_dir = "/";
+	drives.push_back(driveInf);
+#endif
 
 	return drives;
 }
 
 #endif
+
+const vector<file_info> filesys_mgr::get_files(const std::string path) {
+	using boost_path = boost::filesystem::path;
+	vector<file_info> files;
+	boost_path targetPath(path);
+
+	if (exists(targetPath) && is_directory(targetPath)) {
+		for (auto &entry : boost::make_iterator_range(directory_iterator(targetPath))) {
+			file_info fInf;
+
+			fInf.m_is_directory = false;
+			fInf.m_file_name = entry.path().filename().string();
+			if (is_directory(entry.path())) {
+				fInf.m_is_directory = true;
+				fInf.m_file_size = 0;
+			} else {
+				fInf.m_is_directory = false;
+				system::error_code ec;
+				uint64_t size = 0;
+				// i don't think this throws on error
+				if ((size = filesystem::file_size(entry.path(), ec)) != static_cast<uint64_t>(-1)) {
+					fInf.m_file_size = size;
+				} else {
+					fInf.m_file_size = 0;
+				}
+			}
+			files.push_back(fInf);
+		}
+	}
+
+	return files;
+}

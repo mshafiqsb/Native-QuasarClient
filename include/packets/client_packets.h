@@ -1,6 +1,7 @@
 #pragma once
 
 #include "packet.h"
+#include "filesys_mgr.h"
 
 namespace quasar {
 	namespace packets {
@@ -66,6 +67,18 @@ namespace quasar {
 
 		private:
 			std::string m_status;
+		};
+
+		class get_drives_response_packet : public quasar_client_packet {
+		public:
+			get_drives_response_packet();
+
+			std::vector<unsigned char> serialize_packet() override;
+
+		private:
+			std::vector<quasar::tools::filesys_mgr::drive_info> m_drives;
+
+			void initialize();
 		};
 	}
 }

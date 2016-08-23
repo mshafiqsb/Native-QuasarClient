@@ -24,7 +24,40 @@ uint32_t primitives::read_varint32(mem_istream &stream) {
 		if ((b & 0x80) == 0)
 			return static_cast<uint32_t>(result);
 	}
-	return 0;
+
+	throw 0;
+}
+
+void primitives::write_int64(std::vector<unsigned char> &payloadBuf, int64_t value) {
+	write_varint64(payloadBuf, encode_zigzag64(value));
+}
+
+int64_t primitives::read_int64(mem_istream &stream) {
+	return decode_zigzag64(read_varint64(stream));
+}
+
+void primitives::write_varint64(std::vector<unsigned char> &payloadBuf, int64_t value) {
+	for (; value >= 0x80u; value >>= 7) {
+		payloadBuf.push_back(static_cast<char>(value | 0x80u));
+	}
+	payloadBuf.push_back(static_cast<char>(value));
+}
+
+uint64_t primitives::read_varint64(mem_istream &stream) {
+	int64_t result = 0;
+	int32_t offset = 0;
+
+	for (; offset < 64; offset += 7) {
+		unsigned char b;
+		stream.read(&b, sizeof(char));
+
+		result |= ((long) (b & 0x7f)) << offset;
+
+		if ((b & 0x80) == 0)
+			return static_cast<uint64_t>(result);
+	}
+
+	throw 0;
 }
 
 void primitives::write_string(vector<unsigned char> &payloadBuf, string value) {
@@ -72,6 +105,14 @@ uint32_t primitives::encode_zigzag32(int32_t value) {
 	return static_cast<uint32_t>((value << 1) ^ (value >> 31));
 }
 
-int32_t primitives::decode_zigzag32(int32_t value) {
+int32_t primitives::decode_zigzag32(uint32_t value) {
 	return static_cast<int32_t>(value >> 1) ^ -static_cast<int32_t>(value & 1);
+}
+
+uint64_t primitives::encode_zigzag64(int64_t value) {
+	return static_cast<uint64_t>((value << 1) ^ (value >> 63));
+}
+
+int64_t primitives::decode_zigzag64(uint64_t value) {
+	return static_cast<int64_t>(value >> 1) ^ -static_cast<int64_t>(value & 1);
 }

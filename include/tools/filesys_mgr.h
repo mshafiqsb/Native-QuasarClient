@@ -1,3 +1,5 @@
+#pragma once
+
 #include "stdafx.h"
 #include <vector>
 #include <string>
@@ -7,21 +9,19 @@ namespace quasar {
 
 		class filesys_mgr {
 		public:
-
-#ifdef WIN32
 			struct drive_info {
-				std::string display_name;
-				std::string root_dir;
+				std::string m_display_name;
+				std::string m_root_dir;
+			};
+
+			struct file_info {
+				std::string m_file_name;
+				bool m_is_directory;
+				uint32_t m_file_size;
 			};
 
 			static const std::vector<drive_info> get_drives();
-#elif __linux__
-			inline static const std::string get_drive() {
-				return "/";
-			}
-#endif
-
-
+			static const std::vector<file_info> get_files(const std::string path);
 		};
 
 	}

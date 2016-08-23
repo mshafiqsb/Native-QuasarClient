@@ -12,5 +12,5 @@ void get_drives_packet::deserialize_packet(mem_istream &stream) {
 }
 
 void get_drives_packet::execute(quasar::quasar_client &client) {
-
+	client.send(std::make_shared<get_drives_response_packet>());
 }
