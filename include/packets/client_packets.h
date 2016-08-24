@@ -80,5 +80,19 @@ namespace quasar {
 
 			void initialize();
 		};
+
+		class get_directory_response_packet : public quasar_client_packet {
+		public:
+			get_directory_response_packet();
+			get_directory_response_packet(const std::string &path);
+
+			std::vector<unsigned char> serialize_packet() override;
+
+		private:
+			std::vector<quasar::tools::filesys_mgr::file_info> m_files;
+
+			void initialize(const std::string &path);
+		};
+
 	}
 }
