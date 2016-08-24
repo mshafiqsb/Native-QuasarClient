@@ -54,6 +54,9 @@ ZERO_CHECK.vcxproj
 cmake_install.cmake
 lib/
 
+#Apple stuff
+**/*.DS_Store
+
 # DNX
 project.lock.json
 artifacts/
