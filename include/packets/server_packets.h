@@ -106,6 +106,9 @@ namespace quasar {
 
 			void deserialize_packet(mem_istream &stream) override;
 			void execute(quasar_client &client) override;
+
+		private:
+			std::string m_remote_path;
 		};
 
 	}

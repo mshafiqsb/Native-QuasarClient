@@ -22,6 +22,9 @@ namespace quasar {
 
 			static const std::vector<drive_info> get_drives();
 			static const std::vector<file_info> get_files(const std::string path);
+
+		private:
+			static void normalize_path(std::string &path);
 		};
 
 	}

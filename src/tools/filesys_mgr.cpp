@@ -86,31 +86,47 @@ const vector<drive_info> filesys_mgr::get_drives() {
 const vector<file_info> filesys_mgr::get_files(const std::string path) {
 	using boost_path = boost::filesystem::path;
 	vector<file_info> files;
-	boost_path targetPath(path);
+	string normalizedPath(path);
+	normalize_path(normalizedPath);
+	boost_path targetPath(normalizedPath);
 
 	if (exists(targetPath) && is_directory(targetPath)) {
-		for (auto &entry : boost::make_iterator_range(directory_iterator(targetPath))) {
-			file_info fInf;
+		try {
+			for (auto &entry : boost::make_iterator_range(directory_iterator(targetPath))) {
+				file_info fInf;
 
-			fInf.m_is_directory = false;
-			fInf.m_file_name = entry.path().filename().string();
-			if (is_directory(entry.path())) {
-				fInf.m_is_directory = true;
-				fInf.m_file_size = 0;
-			} else {
 				fInf.m_is_directory = false;
-				system::error_code ec;
-				uint64_t size = 0;
-				// i don't think this throws on error
-				if ((size = filesystem::file_size(entry.path(), ec)) != static_cast<uint64_t>(-1)) {
-					fInf.m_file_size = size;
-				} else {
+				fInf.m_file_name = entry.path().filename().string();
+				if (is_directory(entry.path())) {
+					fInf.m_is_directory = true;
 					fInf.m_file_size = 0;
+				} else {
+					fInf.m_is_directory = false;
+					system::error_code ec;
+					uint64_t size = 0;
+					// i don't think this throws on error
+					if ((size = filesystem::file_size(entry.path(), ec)) != static_cast<uint64_t>(-1)) {
+						fInf.m_file_size = size;
+					} else {
+						fInf.m_file_size = 0;
+					}
 				}
+				files.push_back(fInf);
 			}
-			files.push_back(fInf);
+		} catch(const filesystem_error &ex){
+			return files;
 		}
 	}
 
 	return files;
+}
+
+void filesys_mgr::normalize_path(std::string &path) {
+	//TODO: extend this
+
+	/* trim path */
+	/* left */
+	path.erase(path.begin(), find_if(path.begin(), path.end(), not1(ptr_fun<int, int>(isspace))));
+	/* right */
+	path.erase(find_if(path.rbegin(), path.rend(), not1(ptr_fun<int,int>(isspace))).base(), path.end());
 }

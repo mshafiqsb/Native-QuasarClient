@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "packets/server_packets.h"
 
+using namespace std;
 using namespace quasar::packets;
 
 get_directory_packet::get_directory_packet() :
@@ -8,9 +9,10 @@ get_directory_packet::get_directory_packet() :
 }
 
 void get_directory_packet::deserialize_packet(mem_istream &stream) {
-
+	m_remote_path = m_deserializer.read_primitive<string>(stream);
 }
 
 void get_directory_packet::execute(quasar::quasar_client &client) {
-	client.send(std::make_shared<get_drives_response_packet>());
+	auto lol = new get_directory_response_packet(m_remote_path);
+	client.send(std::shared_ptr<get_directory_response_packet>(new get_directory_response_packet(m_remote_path)));
 }

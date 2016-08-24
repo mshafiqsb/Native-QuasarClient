@@ -16,6 +16,21 @@ get_directory_response_packet::get_directory_response_packet(const string &path)
 
 vector<unsigned char> get_directory_response_packet::serialize_packet() {
 	begin_serialization();
+	vector<string> dirs, regularFiles;
+	vector<int64_t> fileSizes;
+
+	for(auto const &file : m_files) {
+		if(file.m_is_directory) {
+			dirs.push_back(file.m_file_name);
+		} else {
+			regularFiles.push_back(file.m_file_name);
+			fileSizes.push_back(file.m_file_size);
+		}
+	}
+
+	m_serializer.write_primitive_array(regularFiles);
+	m_serializer.write_primitive_array(fileSizes);
+	m_serializer.write_primitive_array(dirs);
 
 	return m_serializer.get_serializer_data();
 }
