@@ -21,6 +21,7 @@ namespace quasar {
 			void write_primitive(const std::string &val);
 			void write_primitive(const int32_t &val);
 			void write_primitive(const uint32_t &val);
+			void write_primitive(const int64_t &val);
 
 			/*template<typename T>
 			void write_primitive_array(const std::vector<T> &val) {

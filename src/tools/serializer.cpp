@@ -55,3 +55,7 @@ void serializer::write_primitive(const int32_t &val) {
 void serializer::write_primitive(const uint32_t &val) {
 	primitives::write_varint32(m_stream, val);
 }
+
+void serializer::write_primitive(const int64_t &val) {
+	primitives::write_varint64(m_stream, val);
+}
