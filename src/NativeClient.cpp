@@ -10,8 +10,6 @@ struct HelloWorld {
 };
 
 int main(int argc, char *argv[]) {
-	quasar::tools::filesys_mgr::get_files("C:\\\\");
-	quasar::tools::filesys_mgr::get_drives();
 	boost::asio::io_service io_srvc;
 
 	HelloWorld h;
