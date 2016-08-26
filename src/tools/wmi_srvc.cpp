@@ -12,7 +12,7 @@ wmi_srvc::wmi_srvc() :
 	}
 	CoInitializeSecurity(nullptr, -1, nullptr, nullptr, RPC_C_AUTHN_LEVEL_DEFAULT,
 		RPC_C_IMP_LEVEL_IMPERSONATE, nullptr, EOAC_NONE, nullptr);
-	initialize_wbem();
+	m_can_query = initialize_wbem() && m_is_init;
 }
 
 wmi_srvc::~wmi_srvc() {
@@ -26,6 +26,9 @@ string wmi_srvc::simple_query(const string projection, const string from) const 
 }
 
 string wmi_srvc::simple_query(const string projection, const string from, const string where) const {
+	if(!m_can_query) {
+		return "Failed to query WMI";
+	}
 	CComPtr<IEnumWbemClassObject> wbemEnum;
 	string rawQueryStr("Select " + projection);
 	rawQueryStr.append(" From " + from);

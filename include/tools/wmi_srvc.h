@@ -14,20 +14,27 @@
 
 #ifdef USE_WMI
 
-class wmi_srvc {
-public:
-	wmi_srvc();
-	~wmi_srvc();
+namespace quasar {
+	namespace tools {
 
-	std::string simple_query(const std::string projection, const std::string from) const;
-	std::string simple_query(const std::string projection, const std::string from, const std::string where) const;
+		class wmi_srvc {
+		public:
+			wmi_srvc();
+			~wmi_srvc();
 
-private:
-	bool m_is_init;
-	CComPtr<IWbemLocator> m_wbem_locator;
-	CComPtr<IWbemServices> m_wbem_services;
+			std::string simple_query(const std::string projection, const std::string from) const;
+			std::string simple_query(const std::string projection, const std::string from, const std::string where) const;
 
-	bool initialize_wbem();
-};
+		private:
+			bool m_is_init;
+			bool m_can_query;
+			CComPtr<IWbemLocator> m_wbem_locator;
+			CComPtr<IWbemServices> m_wbem_services;
+
+			bool initialize_wbem();
+		};
+
+	}
+}
 
 #endif
