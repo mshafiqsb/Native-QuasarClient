@@ -2,6 +2,7 @@
 #include "wmi_srvc.h"
 
 using namespace std;
+using namespace quasar::tools;
 
 #ifdef USE_WMI
 
@@ -21,13 +22,13 @@ wmi_srvc::~wmi_srvc() {
 	}
 }
 
-string wmi_srvc::simple_query(const string projection, const string from) const {
-	return simple_query(projection, from, "");
+bool wmi_srvc::simple_query(const string projection, const string from, string &output) const {
+	return simple_query(projection, from, "", output);
 }
 
-string wmi_srvc::simple_query(const string projection, const string from, const string where) const {
+bool wmi_srvc::simple_query(const string projection, const string from, const string where, string &output) const {
 	if(!m_can_query) {
-		return "Failed to query WMI";
+		return false;
 	}
 	CComPtr<IEnumWbemClassObject> wbemEnum;
 	string rawQueryStr("Select " + projection);
@@ -39,21 +40,22 @@ string wmi_srvc::simple_query(const string projection, const string from, const 
 	CComBSTR query = rawQueryStr.c_str();
 
 	if(FAILED(m_wbem_services->ExecQuery(CComBSTR("WQL"), query, WBEM_FLAG_FORWARD_ONLY | WBEM_FLAG_RETURN_IMMEDIATELY, nullptr, &wbemEnum))) {
-		return "Failed to query WMI";
+		return false;
 	}
 
 	ULONG uObjectCount = 0;
 	CComPtr<IWbemClassObject> pWmiObject;
 	if(FAILED(wbemEnum->Next(WBEM_INFINITE, 1, &pWmiObject, &uObjectCount))) {
-		return "Failed to query WMI";
+		return false;
 	}
 
 	CComVariant cvtVersion;
 	if(FAILED(pWmiObject->Get(L"Version", 0, &cvtVersion, 0, 0))) {
-		return "Failed to query WMI";
+		return false;
 	}
 
-	return string(CW2A(cvtVersion.bstrVal));
+	output = CW2A(cvtVersion.bstrVal);
+	return true;
 }
 
 bool wmi_srvc::initialize_wbem() {

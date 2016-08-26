@@ -22,8 +22,8 @@ namespace quasar {
 			wmi_srvc();
 			~wmi_srvc();
 
-			std::string simple_query(const std::string projection, const std::string from) const;
-			std::string simple_query(const std::string projection, const std::string from, const std::string where) const;
+			bool simple_query(const std::string projection, const std::string from, std::string &output) const;
+			bool simple_query(const std::string projection, const std::string from, const std::string where, std::string &output) const;
 
 		private:
 			bool m_is_init;
