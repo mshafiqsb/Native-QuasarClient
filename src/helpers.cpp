@@ -6,6 +6,25 @@ using namespace boost::asio;
 namespace quasar {
 	namespace helpers {
 
+		void trim_string(string &str, const char trimChar) {
+			trim_string_left(str, trimChar);
+			trim_string_right(str, trimChar);
+		}
+
+		void trim_string_left(string &str, const char trimChar) {
+			str.erase(str.begin(), std::find_if(str.begin(), str.end(),
+																					[&trimChar](char c) {
+																						return trimChar != c;
+																					}));
+		}
+
+		void trim_string_right(string &str, const char trimChar) {
+			str.erase(std::find_if(str.rbegin(), str.rend(),
+														 [&trimChar](char c) {
+															 return trimChar != c;
+														 }).base(), str.end());
+		}
+
 		bool string_startswith(const string &str, const string &str2) {
 			if (str.size() < str2.size()) {
 				return false;
@@ -39,7 +58,9 @@ namespace quasar {
 			if (str[0] != '{' || str.back() != '}') {
 				throw 0;
 			}
-			str = str.substr(1, str.size() - 2);
+			trim_string_left(str, '{');
+			trim_string_right(str, '}');
+			trim_string(str, '\"');
 
 			vector<string> tokens = tokenize_string(str, ',');
 			if (tokens.size() % 2 != 0) {
@@ -52,8 +73,10 @@ namespace quasar {
 				if ((pos = tok.find(':')) == string::npos) {
 					continue;
 				} else {
-					string key(tok.substr(1, pos - 2));
-					string val(tok.substr(pos + 2, tok.size() - pos - 3));
+					string key(tok.substr(0, pos));
+					string val(tok.substr(pos + 1, tok.size() - pos - 1));
+					trim_string(key, '\"');
+					trim_string(val, '\"');
 					if (parsedVals.count(key) != 0) {
 						continue;
 					} else {

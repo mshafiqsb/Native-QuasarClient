@@ -1,6 +1,7 @@
 #include <iostream>
 #include "stdafx.h"
 #include "quasar_client.h"
+#include "helpers.h"
 
 struct HelloWorld {
 	void operator()() const {

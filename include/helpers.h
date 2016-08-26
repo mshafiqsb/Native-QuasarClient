@@ -40,6 +40,12 @@ namespace quasar {
 			vector.insert(vector.begin(), chars, chars + sizeof(int32_t));
 		}
 
+		void trim_string(std::string &str, const char trimChar);
+
+		void trim_string_left(std::string &s, const char trimChar);
+
+		void trim_string_right(std::string &s, const char trimChar);
+
 		bool string_startswith(const std::string &str, const std::string &str2);
 
 		bool is_number(const std::string &s);
