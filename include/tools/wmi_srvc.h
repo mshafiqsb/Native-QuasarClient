@@ -1,5 +1,7 @@
 #pragma once
 
+#include "stdafx.h"
+
 #ifdef USE_WMI
 
 #include <atlbase.h>
