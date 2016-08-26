@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "system_info.h"
 #include "helpers.h"
+#include "boost/filesystem.hpp"
 
 #ifdef __linux__
 #include <unistd.h>
@@ -30,6 +31,7 @@
 using namespace std;
 using namespace quasar::tools;
 using namespace boost;
+using namespace boost::filesystem;
 
 system_info::system_info() {
 	initialize_data();

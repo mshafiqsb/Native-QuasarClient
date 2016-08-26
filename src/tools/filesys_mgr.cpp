@@ -11,8 +11,6 @@ using namespace boost::filesystem;
 using drive_info = filesys_mgr::drive_info;
 using file_info = filesys_mgr::file_info;
 
-#ifdef WIN32
-
 const vector<drive_info> filesys_mgr::get_drives() {
 	vector<drive_info> drives;
 #ifdef WIN32
@@ -74,14 +72,12 @@ const vector<drive_info> filesys_mgr::get_drives() {
 	}
 #elif __linux__
 	drive_info driveInf;
-	driveInf.root_dir = "/";
+	driveInf.m_root_dir = "/";
 	drives.push_back(driveInf);
 #endif
 
 	return drives;
 }
-
-#endif
 
 const vector<file_info> filesys_mgr::get_files(const std::string path) {
 	using boost_path = boost::filesystem::path;
