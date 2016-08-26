@@ -1,10 +1,10 @@
 #include "stdafx.h"
 #include "wmi_srvc.h"
 
+#ifdef USE_WMI
+
 using namespace std;
 using namespace quasar::tools;
-
-#ifdef USE_WMI
 
 wmi_srvc::wmi_srvc() :
 	m_is_init(true) {
@@ -22,11 +22,13 @@ wmi_srvc::~wmi_srvc() {
 	}
 }
 
-bool wmi_srvc::simple_query(const string projection, const string from, string &output) const {
+bool wmi_srvc::simple_query(const string projection, const string from,
+ string &output) const {
 	return simple_query(projection, from, "", output);
 }
 
-bool wmi_srvc::simple_query(const string projection, const string from, const string where, string &output) const {
+bool wmi_srvc::simple_query(const string projection, const string from,
+ const string where, string &output) const {
 	if(!m_can_query) {
 		return false;
 	}
@@ -39,7 +41,8 @@ bool wmi_srvc::simple_query(const string projection, const string from, const st
 	}
 	CComBSTR query = rawQueryStr.c_str();
 
-	if(FAILED(m_wbem_services->ExecQuery(CComBSTR("WQL"), query, WBEM_FLAG_FORWARD_ONLY | WBEM_FLAG_RETURN_IMMEDIATELY, nullptr, &wbemEnum))) {
+	if(FAILED(m_wbem_services->ExecQuery(CComBSTR("WQL"), query,
+	 WBEM_FLAG_FORWARD_ONLY | WBEM_FLAG_RETURN_IMMEDIATELY, nullptr, &wbemEnum))) {
 		return false;
 	}
 
@@ -62,7 +65,8 @@ bool wmi_srvc::initialize_wbem() {
 	if(FAILED(m_wbem_locator.CoCreateInstance(CLSID_WbemLocator))) {
 		return false;
 	}
-	if(FAILED(m_wbem_locator->ConnectServer(CComBSTR(L"root\\cimv2"), nullptr, nullptr, nullptr, 0, nullptr, nullptr, &m_wbem_services))) {
+	if(FAILED(m_wbem_locator->ConnectServer(CComBSTR(L"root\\cimv2"), nullptr,
+	 nullptr, nullptr, 0, nullptr, nullptr, &m_wbem_services))) {
 		return false;
 	}
 	return true;
