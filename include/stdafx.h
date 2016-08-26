@@ -7,6 +7,10 @@
 #endif
 #endif
 
+#if USE_WMI && !_MSC_VER
+#undef USE_WMI
+#endif
+
 /* fixes ambiguity issues with max() macro and numeric_limits<T>::max() when using MSVC */
 #ifdef _MSC_VER
 #define NOMINMAX

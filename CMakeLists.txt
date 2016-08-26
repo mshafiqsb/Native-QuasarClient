@@ -13,7 +13,7 @@ if(MSVC)
 endif()
 
 if (WIN32)
-	add_definitions(-DWIN32)
+	add_definitions(-DWIN32 -DUSE_WMI)
 	if(MSVC)
 		add_definitions(-DBOOST_ALL_NO_LIB)
 	endif()

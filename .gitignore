@@ -38,7 +38,7 @@ TestResult.xml
 dlldata.c
 
 #quasar related
-QuasarRAT.VC.VC.opendb
+NativeClient.VC.VC.opendb
 
 #CLion
 .idea/

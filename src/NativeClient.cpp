@@ -2,7 +2,7 @@
 #include <tools/filesys_mgr.h>
 #include "stdafx.h"
 #include "quasar_client.h"
-
+#include "wmi_srvc.h"
 struct HelloWorld {
 	void operator()() const {
 		std::cout << "Hello, World!" << std::endl;
