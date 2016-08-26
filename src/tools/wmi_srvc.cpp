@@ -57,7 +57,7 @@ bool wmi_srvc::initialize_wbem() {
 	if(FAILED(m_wbem_locator.CoCreateInstance(CLSID_WbemLocator))) {
 		return false;
 	}
-	if(FAILED(m_wbem_locator->ConnectServer(CComBSTR(L"root\\cimv2"), nullptr, nullptr, 0, 0, 0, nullptr, &m_wbem_services))) {
+	if(FAILED(m_wbem_locator->ConnectServer(CComBSTR(L"root\\cimv2"), nullptr, nullptr, nullptr, 0, nullptr, nullptr, &m_wbem_services))) {
 		return false;
 	}
 	return true;
