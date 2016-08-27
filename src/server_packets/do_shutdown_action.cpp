@@ -1,10 +1,6 @@
 #include "stdafx.h"
 #include "packets/server_packets.h"
 
-#ifdef WIN32
-#include <powrprof.h>
-#endif
-
 #ifdef __linux__
 #include <sys/reboot.h>
 #endif
