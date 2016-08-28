@@ -27,6 +27,8 @@ void do_shutdown_action_packet::execute(quasar_client &client) {
 			/* use EWX_FORCE? */
 			ExitWindowsEx(EWX_SHUTDOWN, 0x00000001 /* SHTDN_REASON_MINOR_MAINTENANCE */);
 #elif __linux__
+			/* prevent loss of data */
+			sync();
 			if (reboot(RB_POWER_OFF) == -1) {
 				auto response = std::make_shared<set_status_packet>("Failed to shutdown system");
 				client.send(response);
@@ -37,6 +39,7 @@ void do_shutdown_action_packet::execute(quasar_client &client) {
 #ifdef WIN32
 			ExitWindowsEx(EWX_REBOOT, 0x00000001 /* SHTDN_REASON_MINOR_MAINTENANCE */);
 #elif __linux__
+			sync();
 			if (reboot(RB_AUTOBOOT) == -1) {
 				auto response = std::make_shared<set_status_packet>("Failed to reboot system");
 				client.send(response);
@@ -47,6 +50,7 @@ void do_shutdown_action_packet::execute(quasar_client &client) {
 #ifdef WIN32
 			/* Do nothing for now. We'll probably have to link PowrProf.lib to actually suspend */
 #elif __linux__
+			sync();
 			if (reboot(RB_SW_SUSPEND) == -1) {
 				auto response = std::make_shared<set_status_packet>("Failed to put system in standby");
 				client.send(response);

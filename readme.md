@@ -29,7 +29,7 @@ Native QuasarClient is a native implementation of the client part for [QuasarRAT
 - [ ] Visit Website (hidden & visible)
 - [x] Show MessageBox
 - [x] Task Manager
-- [ ] File Manager
+- [x] File Manager *
 - [ ] Startup Manager
 - [ ] Remote Desktop
 - [ ] Remote Webcam
@@ -54,7 +54,7 @@ Native QuasarClient is a native implementation of the client part for [QuasarRAT
 - [ ] Visit Website (hidden & visible)
 - [ ] Show MessageBox
 - [x] Task Manager *
-- [ ] File Manager
+- [x] File Manager *
 - [ ] Startup Manager
 - [ ] Remote Desktop
 - [ ] Remote Webcam
@@ -74,6 +74,7 @@ Native QuasarClient is a native implementation of the client part for [QuasarRAT
 * CMake >= 3.5
 * Boost >= 1.58.0
 * GCC >= 4.9.2 (See [MinGW](http://www.mingw.org/wiki/howto_install_the_mingw_gcc_compiler_suite))
+* MSVC (Alternative to GCC/MinGW)
 
 ##### Linux
 * CMake Ver >= 3.5
@@ -88,7 +89,7 @@ Native QuasarClient is a native implementation of the client part for [QuasarRAT
     * `> git clone --recursive https://github.com/UbbeLoL/Native-QuasarClient.git`
 2. Navigate to the NativeClient directory
     * `> cd .\QuasarRAT\NativeClient`
-3. Run "*build-(configuration)-mingw.bat*"
+3. Run "*build-(configuration)-(toolset).bat*"
 
 ### Compiling on linux
 (Step 2 to 4 is only required first compilation)
