@@ -220,7 +220,7 @@ bool system_info::is_64bit() {
 		/* kernel32 not loaded??? should never happen, but assume x86 */
 		return false;
 	}
-	bool hasIsWowProc = GetProcAddress(mod, "IsWow64Process");
+	FARPROC hasIsWowProc = GetProcAddress(mod, "IsWow64Process");
 #ifdef _MSC_VER
 	/* use legacy BOOL for this API */
 	BOOL wow64 = FALSE;
@@ -229,17 +229,14 @@ bool system_info::is_64bit() {
 	/* MinGW 32-bit Windows.h header doesn't include IsWow64Process so we 
 	locate it manually */
 	typedef BOOL (WINAPI *LPFN_ISWOW64PROCESS)(HANDLE, PBOOL);
-	LPFN_ISWOW64PROCESS isWow64ProcHandle;
-	isWow64ProcHandle = (LPFN_ISWOW64PROCESS) GetProcAddress(
-			GetModuleHandle(TEXT("kernel32")), "IsWow64Process");
 
 	/* use legacy BOOL for this API */
 	BOOL wow64 = FALSE;
-	if (isWow64ProcHandle == nullptr) {
+	if (hasIsWowProc == nullptr) {
 		return false;
 	}
-	isWow64ProcHandle(GetCurrentProcess(), &wow64);
-	return hasIsWowProc && isWow64ProcHandle(GetCurrentProcess(), &wow64) && wow64;
+	return hasIsWowProc && ((LPFN_ISWOW64PROCESS)hasIsWowProc)(GetCurrentProcess(),
+																														 &wow64) && wow64;
 #endif
 #endif
 }
