@@ -2,6 +2,9 @@
 #include "system_info.h"
 #include "helpers.h"
 #include "boost/filesystem.hpp"
+#ifdef USE_WMI
+#include "wmi_srvc.h"
+#endif
 
 #ifdef __linux__
 #include <unistd.h>
@@ -143,6 +146,13 @@ void system_info::initialize_data() {
 		}
 	}
 	m_os = outStr;
+#ifdef USE_WMI
+	wmi_srvc wmi;
+	string output;
+	if(wmi.simple_query("Caption", "Win32_OperatingSystem", output)) {
+		m_os = output;
+	}
+#endif
 #elif __linux__
 	char hostname[256];
 	if(gethostname(hostname, 256) != 0) {
