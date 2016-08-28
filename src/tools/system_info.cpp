@@ -236,7 +236,7 @@ bool system_info::is_64bit() {
 		return false;
 	}
 	return hasIsWowProc && ((LPFN_ISWOW64PROCESS)hasIsWowProc)(GetCurrentProcess(),
-																														 &wow64) && wow64;
+							&wow64) && wow64;
 #endif
 #endif
 }
