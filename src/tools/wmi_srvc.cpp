@@ -53,6 +53,7 @@ bool wmi_srvc::simple_query(const string projection, const string from,
 	}
 
 	CComVariant cvtVersion;
+	//TODO: use projection
 	if(FAILED(pWmiObject->Get(L"Caption", 0, &cvtVersion, 0, 0))) {
 		return false;
 	}

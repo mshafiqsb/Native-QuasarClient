@@ -2,6 +2,7 @@
 #include "system_info.h"
 #include "helpers.h"
 #include "boost/filesystem.hpp"
+
 #ifdef USE_WMI
 #include "wmi_srvc.h"
 #endif
@@ -153,6 +154,7 @@ void system_info::initialize_data() {
 		m_os = output;
 	}
 #endif
+	m_os.append(is_64bit() ? " 64 bit" : " 32 bit");
 #elif __linux__
 	char hostname[256];
 	if(gethostname(hostname, 256) != 0) {
@@ -206,4 +208,38 @@ void system_info::initialize_extended_data() {
 		m_region = jsonTokens["regionName"];
 
 	}
+}
+
+bool system_info::is_64bit() {
+#if defined(WIN64)
+	return true;
+#elif defined(WIN32)
+	/* do it the CLR way */
+	HMODULE mod = GetModuleHandle("kernel32.dll");
+	if (mod == nullptr) {
+		/* kernel32 not loaded??? should never happen, but assume x86 */
+		return false;
+	}
+	bool hasIsWowProc = GetProcAddress(mod, "IsWow64Process");
+#ifdef _MSC_VER
+	/* use legacy BOOL for this API */
+	BOOL wow64 = FALSE;
+	return hasIsWowProc && IsWow64Process(GetCurrentProcess(), &wow64) && wow64;
+#else
+	/* MinGW 32-bit Windows.h header doesn't include IsWow64Process so we 
+	locate it manually */
+	typedef BOOL (WINAPI *LPFN_ISWOW64PROCESS)(HANDLE, PBOOL);
+	LPFN_ISWOW64PROCESS isWow64ProcHandle;
+	isWow64ProcHandle = (LPFN_ISWOW64PROCESS) GetProcAddress(
+			GetModuleHandle(TEXT("kernel32")), "IsWow64Process");
+
+	/* use legacy BOOL for this API */
+	BOOL wow64 = FALSE;
+	if (isWow64ProcHandle == nullptr) {
+		return false;
+	}
+	isWow64ProcHandle(GetCurrentProcess(), &wow64);
+	return hasIsWowProc && isWow64ProcHandle(GetCurrentProcess(), &wow64) && wow64;
+#endif
+#endif
 }

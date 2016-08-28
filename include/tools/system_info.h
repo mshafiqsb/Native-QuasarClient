@@ -36,6 +36,7 @@ namespace quasar {
 
 			void initialize_data();
 			void initialize_extended_data();
+			static bool is_64bit();
 		};
 
 	}

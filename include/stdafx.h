@@ -2,8 +2,13 @@
 
 #ifndef __linux__
 #ifndef WIN32
+#if defined(_WIN32) || defined(_WIN64)
+#define __WINDOWS_
 #ifdef _WIN32
 #define WIN32
+#else
+#define WIN64
+#endif
 #endif
 #endif
 
