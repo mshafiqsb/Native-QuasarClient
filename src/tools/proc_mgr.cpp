@@ -78,7 +78,7 @@ void proc_mgr::kill_process(int32_t pid) {
 	if (proc == nullptr) {
 		return;
 	}
-	TerminateProcess(proc, -1);
+	TerminateProcess(proc, 0);
 	CloseHandle(proc);
 #elif __linux__
 	// Just to be safe we don't want to send
@@ -116,9 +116,10 @@ string proc_mgr::get_proc_name(DWORD pid) {
 		return "<unknown>";
 	}
 
-	for (bool bok = static_cast<bool>(Process32First(processesSnapshot, &processInfo)); bok; bok = Process32Next(
+	for (auto bok = static_cast<bool>(Process32First(processesSnapshot,
+																									 &processInfo)); bok; bok = static_cast<bool>(Process32Next(
 			processesSnapshot,
-			&processInfo)) {
+			&processInfo))) {
 		if (pid == processInfo.th32ProcessID) {
 			CloseHandle(processesSnapshot);
 			return string(processInfo.szExeFile);
@@ -159,7 +160,7 @@ string proc_mgr::get_proc_main_title(DWORD pid) {
 #ifdef __WINDOWS__
 	process_info pinfo;
 	pinfo.main_wnd_title = "";
-	pinfo.pid = pid;
+	pinfo.pid = static_cast<int32_t>(pid);
 	EnumWindows(enum_windows_proc_cb, reinterpret_cast<LPARAM>(&pinfo));
 	return pinfo.main_wnd_title;
 #endif
@@ -185,10 +186,7 @@ BOOL proc_mgr::enum_windows_proc_cb(HWND hwnd, LPARAM lParam) {
 
 bool proc_mgr::is_main_window(HWND hwnd) {
 	/* this is how the .NET CLR does it */
-	if (GetWindow(hwnd, GW_OWNER) != nullptr || !IsWindowVisible(hwnd)) {
-		return false;
-	}
-	return true;
+	return !(GetWindow(hwnd, GW_OWNER) != nullptr || !IsWindowVisible(hwnd));
 }
 
 #endif
