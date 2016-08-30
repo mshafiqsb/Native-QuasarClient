@@ -20,7 +20,7 @@ int main(int argc, char *argv[]) {
 	io_srvc.run();
 
 	for (;;) {
-#ifdef WIN32
+#ifdef __WINDOWS__
 		Sleep(1000);
 #elif __linux__
 		sleep(1000);

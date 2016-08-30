@@ -13,7 +13,7 @@
 
 #endif
 
-#ifdef WIN32
+#ifdef __WINDOWS__
 #define XP_VER_MAJOR 5
 
 #define VISTA_VER_MAJOR 6
@@ -42,7 +42,7 @@ system_info::system_info() {
 	initialize_extended_data();
 }
 
-#if WIN32 && !_MSC_VER
+#if __WINDOWS__ && !_MSC_VER
 
 typedef struct _TOKEN_ELEVATION {
 	DWORD TokenIsElevated;
@@ -83,7 +83,7 @@ string system_info::get_region() const {
 }
 
 void system_info::initialize_data() {
-#ifdef WIN32
+#ifdef __WINDOWS__
 	TCHAR infoBuf[255];
 	DWORD bufCharCount = 255;
 

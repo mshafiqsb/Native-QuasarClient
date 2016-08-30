@@ -2,7 +2,7 @@
 #include "packets/server_packets.h"
 #include <helpers.h>
 
-#ifdef WIN32
+#ifdef __WINDOWS__
 
 #include <psapi.h>
 #include <TlHelp32.h>

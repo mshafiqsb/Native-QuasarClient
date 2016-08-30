@@ -65,7 +65,7 @@ void aes_crypt::set_auth_key(std::vector<unsigned char> authKey) {
 
 void aes_crypt::encrypt(vector<unsigned char> &data) {
 	char testBlock1[16], testBlock2[64];
-#ifdef WIN32
+#ifdef __WINDOWS__
 	ZeroMemory(testBlock1, 16);
 	ZeroMemory(testBlock2, 64);
 #else

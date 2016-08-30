@@ -11,7 +11,7 @@
 #include <map>
 #include <vector>
 
-#ifdef WIN32
+#ifdef __WINDOWS__
 
 #include <cctype>
 #include <wininet.h>

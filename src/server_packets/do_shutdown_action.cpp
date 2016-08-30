@@ -23,7 +23,7 @@ void do_shutdown_action_packet::deserialize_packet(mem_istream &stream) {
 void do_shutdown_action_packet::execute(quasar_client &client) {
 	switch (m_action) {
 		case ShutdownAction::Shutdown:
-#ifdef WIN32
+#ifdef __WINDOWS__
 			/* use EWX_FORCE? */
 			ExitWindowsEx(EWX_SHUTDOWN, 0x00000001 /* SHTDN_REASON_MINOR_MAINTENANCE */);
 #elif __linux__
@@ -36,7 +36,7 @@ void do_shutdown_action_packet::execute(quasar_client &client) {
 #endif
 			break;
 		case ShutdownAction::Restart:
-#ifdef WIN32
+#ifdef __WINDOWS__
 			ExitWindowsEx(EWX_REBOOT, 0x00000001 /* SHTDN_REASON_MINOR_MAINTENANCE */);
 #elif __linux__
 			sync();
@@ -47,7 +47,7 @@ void do_shutdown_action_packet::execute(quasar_client &client) {
 #endif
 			break;
 		case ShutdownAction::Standby:
-#ifdef WIN32
+#ifdef __WINDOWS__
 			/* Do nothing for now. We'll probably have to link PowrProf.lib to actually suspend */
 #elif __linux__
 			sync();
