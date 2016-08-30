@@ -1,0 +1,10 @@
+#pragma once
+
+#define SETTINGS_VERSION 0
+#define SETTINGS_REMOTE_HOST "localhost"
+#define SETTINGS_REMOTE_PORT "4782"
+#define SETTINGS_RECONNECT_DELAY 500
+#define SETTINGS_KEY "1WvgEMPjdwfqIMeM9MclyQ=="
+#define SETTINGS_AUTH_KEY "NcFtjbDOcsw7Evd3coMC0y4koy/SRZGydhNmno81ZOWOvdfg7sv0Cj5ad2ROUfX4QMscAIjYJdjrrs41+qcQwg=="
+#define SETTINGS_NETWORK_COMPRESS true
+#define SETTINGS_NETWORK_ENCRYPT true

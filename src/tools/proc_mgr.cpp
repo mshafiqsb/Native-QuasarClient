@@ -32,7 +32,7 @@ using namespace quasar::tools;
 vector<process_info> proc_mgr::get_proc_infos() {
 	vector<process_info> procInfos;
 
-#if WIN32
+#ifdef __WINDOWS__
 	DWORD procs[1024], needed;
 	TCHAR procName[MAX_PATH] = TEXT("<unknown>");
 
@@ -75,7 +75,7 @@ vector<process_info> proc_mgr::get_proc_infos() {
 }
 
 void proc_mgr::kill_process(int32_t pid) {
-#ifdef WIN32
+#ifdef __WINDOWS__
 	HANDLE proc = OpenProcess(PROCESS_TERMINATE, false, pid);
 	if (proc == nullptr) {
 		return;
@@ -92,7 +92,7 @@ void proc_mgr::kill_process(int32_t pid) {
 }
 
 bool proc_mgr::start_process(std::string file) {
-#ifdef WIN32
+#ifdef __WINDOWS__
 	if (file.empty() || file == "") {
 		return false;
 	}
@@ -104,13 +104,13 @@ bool proc_mgr::start_process(std::string file) {
 	return false;
 }
 
-#ifdef WIN32
+#ifdef __WINDOWS__
 
 string proc_mgr::get_proc_name(DWORD pid) {
 #elif __linux__
 	string proc_mgr::get_proc_name(int32_t pid) {
 #endif
-#ifdef WIN32
+#ifdef __WINDOWS__
 /* http://stackoverflow.com/a/35623208 */
 	PROCESSENTRY32 processInfo;
 	processInfo.dwSize = sizeof(processInfo);
@@ -119,8 +119,8 @@ string proc_mgr::get_proc_name(DWORD pid) {
 		return "<unknown>";
 	}
 
-	for (bool bok = Process32First(processesSnapshot, &processInfo); bok; bok = Process32Next(processesSnapshot,
-																																														&processInfo)) {
+	for (bool bok = (bool) Process32First(processesSnapshot, &processInfo); bok; bok = Process32Next(processesSnapshot,
+																																																	 &processInfo)) {
 		if (pid == processInfo.th32ProcessID) {
 			CloseHandle(processesSnapshot);
 			return string(processInfo.szExeFile);
@@ -152,13 +152,13 @@ string proc_mgr::get_proc_name(DWORD pid) {
 	return "<unknown>";
 }
 
-#ifdef WIN32
+#ifdef __WINDOWS__
 
 string proc_mgr::get_proc_main_title(DWORD pid) {
 #elif __linux__
 	string proc_mgr::get_proc_main_title(int32_t pid) {
 #endif
-#ifdef WIN32
+#ifdef __WINDOWS__
 	process_info pinfo;
 	pinfo.main_wnd_title = "";
 	pinfo.pid = pid;
@@ -168,7 +168,7 @@ string proc_mgr::get_proc_main_title(DWORD pid) {
 	return "";
 }
 
-#ifdef WIN32
+#ifdef __WINDOWS__
 
 BOOL proc_mgr::enum_windows_proc_cb(HWND hwnd, LPARAM lParam) {
 	unsigned long pid;

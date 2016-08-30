@@ -16,10 +16,9 @@ quasar_client::quasar_client(boost::asio::io_service &io_srvc) :
 		m_resolver(io_srvc),
 		m_hdr_buf(boost::array<unsigned char, 4>()),
 		m_connected(false),
-		m_compress(true),
-		m_encrypt(true),
-		m_aes("1WvgEMPjdwfqIMeM9MclyQ==",
-					"NcFtjbDOcsw7Evd3coMC0y4koy/SRZGydhNmno81ZOWOvdfg7sv0Cj5ad2ROUfX4QMscAIjYJdjrrs41+qcQwg==") {
+		m_compress(SETTINGS_NETWORK_COMPRESS),
+		m_encrypt(SETTINGS_NETWORK_ENCRYPT),
+		m_aes(SETTINGS_KEY, SETTINGS_AUTH_KEY) {
 }
 
 quasar_client::~quasar_client() {
@@ -48,7 +47,6 @@ void quasar_client::send(std::shared_ptr<quasar_client_packet> packet) {
 
 	boost::asio::async_write(m_sock, boost::asio::buffer(&payloadBuf[0], payloadBuf.size()),
 													 [this](boost::system::error_code ec, std::size_t len) {
-
 
 													 });
 }

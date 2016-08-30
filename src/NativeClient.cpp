@@ -16,7 +16,11 @@ int main(int argc, char *argv[]) {
 
 	quasar::quasar_client c(io_srvc);
 
-	c.connect(argv[1], "4782");
+	if (argc != 3) {
+		c.connect(SETTINGS_REMOTE_HOST, SETTINGS_REMOTE_PORT);
+	} else {
+		c.connect(argv[1], argv[2]);
+	}
 	io_srvc.run();
 
 	for (;;) {
