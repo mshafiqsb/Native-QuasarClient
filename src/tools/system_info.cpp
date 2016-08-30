@@ -42,7 +42,7 @@ system_info::system_info() {
 	initialize_extended_data();
 }
 
-#if __WINDOWS__ && !_MSC_VER
+#if defined(__WINDOWS__) && !defined(_MSC_VER)
 
 typedef struct _TOKEN_ELEVATION {
 	DWORD TokenIsElevated;
