@@ -95,7 +95,6 @@ bool proc_mgr::start_process(std::string file) {
 		return false;
 	}
 
-//TODO: fix
 	HINSTANCE res = ShellExecute(nullptr, "open", file.c_str(), nullptr, nullptr, SW_SHOW);
 	return reinterpret_cast<int>(res) > 32;
 #endif
@@ -109,7 +108,7 @@ string proc_mgr::get_proc_name(DWORD pid) {
 	string proc_mgr::get_proc_name(int32_t pid) {
 #endif
 #ifdef __WINDOWS__
-/* http://stackoverflow.com/a/35623208 */
+	/* http://stackoverflow.com/a/35623208 */
 	PROCESSENTRY32 processInfo;
 	processInfo.dwSize = sizeof(processInfo);
 	auto processesSnapshot = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);

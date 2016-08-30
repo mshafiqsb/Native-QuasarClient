@@ -84,7 +84,7 @@ string primitives::read_string(mem_istream &stream) {
 	}
 
 	totalBytes--;
-// skip totalchars
+	/* skip totalchars */
 	primitives::read_varint32(stream);
 	int32_t streamBytesLeft = totalBytes;
 	std::vector<unsigned char> buf(totalBytes);
