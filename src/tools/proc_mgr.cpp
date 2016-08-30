@@ -34,18 +34,16 @@ vector<process_info> proc_mgr::get_proc_infos() {
 
 #ifdef __WINDOWS__
 	DWORD procs[1024], needed;
-	TCHAR procName[MAX_PATH] = TEXT("<unknown>");
 
 	if (EnumProcesses(procs, sizeof procs, &needed)) {
 		DWORD procCount = needed / sizeof(DWORD);
 
 		for (int32_t i = 0; i < procCount; i++) {
 			process_info pinfo;
-			HANDLE procHandle = OpenProcess(PROCESS_VM_READ | PROCESS_QUERY_INFORMATION, false, procs[i]);
-			pinfo.pid = procs[i];
+			pinfo.pid = static_cast<int32_t>(procs[i]);
 			pinfo.proc_name = get_proc_name(procs[i]);
 			//TODO: fix widechar string stuff for deserializer...
-			pinfo.main_wnd_title = "";//get_proc_main_title(procs[i]);
+			pinfo.main_wnd_title = ""; //get_proc_main_title(procs[i]);
 			procInfos.push_back(pinfo);
 		}
 	}
@@ -76,7 +74,7 @@ vector<process_info> proc_mgr::get_proc_infos() {
 
 void proc_mgr::kill_process(int32_t pid) {
 #ifdef __WINDOWS__
-	HANDLE proc = OpenProcess(PROCESS_TERMINATE, false, pid);
+	HANDLE proc = OpenProcess(PROCESS_TERMINATE, false, static_cast<DWORD>(pid));
 	if (proc == nullptr) {
 		return;
 	}
@@ -99,7 +97,7 @@ bool proc_mgr::start_process(std::string file) {
 
 //TODO: fix
 	HINSTANCE res = ShellExecute(nullptr, "open", file.c_str(), nullptr, nullptr, SW_SHOW);
-	return true;
+	return reinterpret_cast<int>(res) > 32;
 #endif
 	return false;
 }
@@ -119,8 +117,9 @@ string proc_mgr::get_proc_name(DWORD pid) {
 		return "<unknown>";
 	}
 
-	for (bool bok = (bool) Process32First(processesSnapshot, &processInfo); bok; bok = Process32Next(processesSnapshot,
-																																																	 &processInfo)) {
+	for (bool bok = static_cast<bool>(Process32First(processesSnapshot, &processInfo)); bok; bok = Process32Next(
+			processesSnapshot,
+			&processInfo)) {
 		if (pid == processInfo.th32ProcessID) {
 			CloseHandle(processesSnapshot);
 			return string(processInfo.szExeFile);
@@ -182,7 +181,7 @@ BOOL proc_mgr::enum_windows_proc_cb(HWND hwnd, LPARAM lParam) {
 			return false;
 		}
 	}
-	return TRUE;
+	return true;
 }
 
 bool proc_mgr::is_main_window(HWND hwnd) {
